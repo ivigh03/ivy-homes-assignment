@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect } from 'react'
 import { login as apiLogin, logout as apiLogout } from '../api/auth'
 
 const AuthContext = createContext(null)
@@ -32,6 +32,17 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('ivy_user')
     setToken(null)
     setUser(null)
+  }, [])
+
+  // When the token refresh fails (15-min expiry), clear React state so
+  // RequireAuth redirects to /login instead of showing a broken page.
+  useEffect(() => {
+    function handleExpired() {
+      setToken(null)
+      setUser(null)
+    }
+    window.addEventListener('ivy:auth:expired', handleExpired)
+    return () => window.removeEventListener('ivy:auth:expired', handleExpired)
   }, [])
 
   return (

@@ -75,6 +75,7 @@ apiClient.interceptors.response.use(
         localStorage.removeItem('ivy_token')
         localStorage.removeItem('ivy_refresh_token')
         localStorage.removeItem('ivy_user')
+        window.dispatchEvent(new Event('ivy:auth:expired'))
         return Promise.reject(refreshError)
       } finally {
         isRefreshing = false
