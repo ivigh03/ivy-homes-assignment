@@ -31,6 +31,9 @@ yarn-debug.log*
 yarn-error.log*
 
 
+# Credentials — use ivy-frontend/.env.example as the template
+ivy-frontend/.env
+
+# Assignment reference docs (Ivy Homes' content, not our work)
 API_REFERENCE.md
 statement.md
-submission.template.json
