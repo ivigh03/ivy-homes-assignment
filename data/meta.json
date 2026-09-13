@@ -1,0 +1,16 @@
+{
+  "downloaded_at": "2026-09-13T17:59:45.304Z",
+  "actual_page_limit": 50,
+  "listings": {
+    "declared_total": 3233,
+    "fetched": 3500
+  },
+  "rentals": {
+    "declared_total": 1219,
+    "fetched": 1320
+  },
+  "projects": {
+    "declared_total": 370,
+    "fetched": 400
+  }
+}

@@ -1,0 +1,349 @@
+{
+  "tested_at": "2026-09-13T18:00:37.232Z",
+  "results": {
+    "login_response_fields": [
+      "access_token",
+      "refresh_token",
+      "token_type",
+      "expires_in",
+      "refresh_url",
+      "user"
+    ],
+    "expires_in_seconds": 900,
+    "token_type": "Bearer",
+    "user_fields": [
+      "email"
+    ],
+    "has_refresh_token": true,
+    "has_refresh_url": true,
+    "listings_without_bearer_token": {
+      "status": 401,
+      "detail": "missing bearer token - log in at POST /auth/login first"
+    },
+    "api_key_as_query_param": {
+      "status": 401,
+      "detail": "send your key in the X-API-Key request header, not as a query parameter"
+    },
+    "logout_response": {
+      "ok": true,
+      "note": "tokens are stateless; discard them client side"
+    },
+    "auth_refresh": {
+      "status": 200,
+      "has_access_token": true
+    },
+    "limit_200_actual_limit": 50,
+    "limit_999_actual_limit": 50,
+    "page_param_ignored": true,
+    "response_shape_fields": [
+      "limit",
+      "offset",
+      "count",
+      "total",
+      "has_more",
+      "results"
+    ],
+    "property_type_filter_works": true,
+    "bhk_filter_works": true,
+    "locality_filter_works": true,
+    "furnishing_filter_works": true,
+    "price_range_filter_works": true,
+    "price_range_results": [
+      11350000,
+      11190000,
+      11130000,
+      11640000,
+      12000000
+    ],
+    "project_id_filter": {
+      "total": 3233,
+      "all_match": false
+    },
+    "price_sort_asc_ids": [
+      "100-6001461",
+      "ZER-6000669",
+      "DWE-6002663",
+      "SQU-6003044",
+      "100-6002071"
+    ],
+    "price_sort_desc_ids": [
+      "100-6001461",
+      "ZER-6000669",
+      "DWE-6002663",
+      "SQU-6003044",
+      "100-6002071"
+    ],
+    "price_sort_asc_prices": [
+      -17880000,
+      -17660000,
+      -13650000,
+      -12640000,
+      -12340000
+    ],
+    "price_sort_desc_prices": [
+      -17880000,
+      -17660000,
+      -13650000,
+      -12640000,
+      -12340000
+    ],
+    "price_sort_gives_same_order_asc_vs_desc": true,
+    "posted_at_sort_same_asc_vs_desc": true,
+    "posted_at_asc_dates": [
+      "2026-01-13T12:10:00",
+      "2026-01-13T12:34:00",
+      "2026-01-13T12:36:00",
+      "2026-01-13T17:55:00",
+      "2026-01-13T04:25:00"
+    ],
+    "posted_at_desc_dates": [
+      "2026-01-13T12:10:00",
+      "2026-01-13T12:34:00",
+      "2026-01-13T12:36:00",
+      "2026-01-13T17:55:00",
+      "2026-01-13T04:25:00"
+    ],
+    "bedroom_asc_bedrooms": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "bedroom_desc_bedrooms": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "posted_at_sample": [
+      "2026-08-19T10:52:00",
+      "2026-03-12T16:31:00",
+      "2026-03-03T08:09:00",
+      "2026-04-10T20:55:00",
+      "2026-07-09T15:37:00"
+    ],
+    "posted_at_has_timezone_suffix": false,
+    "v1_listing_singular_status": 404,
+    "v1_listings_plural_status": 200,
+    "similar_endpoint_status": 404,
+    "analytics_summary_status": 404,
+    "favourites_endpoint_status": 404,
+    "rental_sample_fields": [
+      "listing_id",
+      "listing_url",
+      "website",
+      "city_id",
+      "title",
+      "apartment_name",
+      "locality",
+      "property_type",
+      "bedroom",
+      "bathroom",
+      "floor",
+      "total_floors",
+      "furnishing",
+      "facing_direction",
+      "price",
+      "deposit",
+      "maintenance",
+      "carpet_area",
+      "super_builtup_area",
+      "latitude",
+      "longitude",
+      "posted_by",
+      "posted_by_name",
+      "posted_by_contact",
+      "description",
+      "posted_at",
+      "is_live"
+    ]
+  },
+  "findings": [
+    {
+      "endpoint": "/auth/login",
+      "category": "auth",
+      "documented": "expires_in: 86400 (24 hours)",
+      "actual": "expires_in: 900 (15 minutes)",
+      "how_found": "inspected login response body",
+      "impact": "Refresh token flow required much sooner than documented",
+      "evidence": []
+    },
+    {
+      "endpoint": "/auth/login",
+      "category": "auth",
+      "documented": "response field: \"token\"",
+      "actual": "response field is \"access_token\" (not \"token\")",
+      "how_found": "inspected login response body",
+      "impact": "Code relying on response.token will always get undefined",
+      "evidence": []
+    },
+    {
+      "endpoint": "/auth/login",
+      "category": "completeness",
+      "documented": "user object contains \"email\" and \"name\"",
+      "actual": "user object contains only: email",
+      "how_found": "inspected login response user field",
+      "impact": "Code displaying user.name will show undefined",
+      "evidence": []
+    },
+    {
+      "endpoint": "*",
+      "category": "auth",
+      "documented": "Append API key as query parameter: ?api_key=IVY26-XXXX",
+      "actual": "API key must be sent in X-API-Key request header, not as query parameter. Error: \"send your key in the X-API-Key request header, not as a query parameter\"",
+      "how_found": "sent api_key as query param, received error",
+      "impact": "All documented curl examples using ?api_key= will fail",
+      "evidence": []
+    },
+    {
+      "endpoint": "/auth/logout",
+      "category": "auth",
+      "documented": "Invalidates the current token server side",
+      "actual": "Tokens are stateless: \"tokens are stateless; discard them client side\"",
+      "how_found": "called POST /auth/logout and read response note",
+      "impact": "Tokens cannot be invalidated server-side; logout is client-side only",
+      "evidence": []
+    },
+    {
+      "endpoint": "/v1/listings",
+      "category": "pagination",
+      "documented": "limit parameter: Maximum 200",
+      "actual": "limit is silently capped at 50; requesting 200 or 999 both return limit=50",
+      "how_found": "sent limit=200, limit=999, both returned limit=50",
+      "impact": "Scripts expecting 200 records per page will get only 50; requires 4× more requests",
+      "evidence": []
+    },
+    {
+      "endpoint": "/v1/listings",
+      "category": "pagination",
+      "documented": "page parameter (1-indexed) controls which page to return",
+      "actual": "page parameter is silently ignored; pagination requires offset parameter instead",
+      "how_found": "page=2,limit=2 returned same results as offset=0,limit=2",
+      "impact": "Page-based iteration misses records beyond page 1",
+      "evidence": []
+    },
+    {
+      "endpoint": "/v1/listings",
+      "category": "pagination",
+      "documented": "collection response shape: { total, page, page_size, results }",
+      "actual": "actual shape: { limit, offset, count, total, has_more, results } — has_more and offset instead of page/page_size",
+      "how_found": "inspected collection response envelope fields",
+      "impact": "Code reading response.page or response.page_size always gets undefined",
+      "evidence": []
+    },
+    {
+      "endpoint": "/v1/listings",
+      "category": "filters",
+      "documented": "not documented",
+      "actual": "project_id query parameter is silently ignored (returns full result set)",
+      "how_found": "?project_id=P60096 returned same total as unfiltered query",
+      "impact": "Cannot filter listings by project via API; must do client-side",
+      "evidence": [
+        "P60096"
+      ]
+    },
+    {
+      "endpoint": "/v1/listings",
+      "category": "sorting",
+      "documented": "sort_by=price with order=asc|desc sorts by price",
+      "actual": "sort_by=price returns identical order for both asc and desc — parameter appears silently ignored",
+      "how_found": "compared first 5 listing_ids for sort_by=price&order=asc vs desc, got same sequence",
+      "impact": "Price sorting is unreliable; results are in default insertion order",
+      "evidence": [
+        "100-6001461",
+        "ZER-6000669",
+        "DWE-6002663",
+        "SQU-6003044",
+        "100-6002071"
+      ]
+    },
+    {
+      "endpoint": "/v1/listings",
+      "category": "sorting",
+      "documented": "sort_by=posted_at with order=asc|desc sorts by posting date",
+      "actual": "sort_by=posted_at returns identical order for both asc and desc — parameter appears silently ignored",
+      "how_found": "compared first 5 listing_ids for posted_at sort asc vs desc, got same sequence",
+      "impact": "Date sorting is unreliable",
+      "evidence": [
+        "MAG-6003333",
+        "100-6001517",
+        "MAG-6000539"
+      ]
+    },
+    {
+      "endpoint": "/v1/listings",
+      "category": "timestamps",
+      "documented": "Timestamps: ISO 8601, UTC, Z suffix, everywhere in the API",
+      "actual": "posted_at has no timezone suffix (e.g. \"2026-08-19T10:52:00\") — server clock is IST (+05:30) so timestamps are likely IST-local",
+      "how_found": "inspected posted_at values in listing records, none had Z or +05:30",
+      "impact": "Timezone-aware date comparisons will be off by 5h30m if treated as UTC",
+      "evidence": [
+        "2026-08-19T10:52:00",
+        "2026-03-12T16:31:00",
+        "2026-03-03T08:09:00",
+        "2026-04-10T20:55:00",
+        "2026-07-09T15:37:00"
+      ]
+    },
+    {
+      "endpoint": "/v1/listing/{id}",
+      "category": "missing_endpoint",
+      "documented": "GET /v1/listing/{listing_id} — a single listing",
+      "actual": "returns 404 Not Found; correct path is GET /v1/listings/{listing_id} (plural)",
+      "how_found": "called /v1/listing/100-6000047 and got 404",
+      "impact": "Code using singular path always gets 404",
+      "evidence": [
+        "100-6000047"
+      ]
+    },
+    {
+      "endpoint": "/v1/listings/{id}/similar",
+      "category": "missing_endpoint",
+      "documented": "GET /v1/listings/{listing_id}/similar — up to ten comparable listings",
+      "actual": "returns 404 Not Found",
+      "how_found": "called endpoint directly",
+      "impact": "\"You may also like\" feature cannot be implemented",
+      "evidence": [
+        "100-6000047"
+      ]
+    },
+    {
+      "endpoint": "/v1/analytics/summary",
+      "category": "missing_endpoint",
+      "documented": "GET /v1/analytics/summary — pre-computed aggregates for your city",
+      "actual": "returns 404 Not Found",
+      "how_found": "called endpoint directly",
+      "impact": "Analytics/insights screen cannot use this endpoint",
+      "evidence": []
+    },
+    {
+      "endpoint": "/v1/favourites",
+      "category": "missing_endpoint",
+      "documented": "GET /v1/favourites — logged-in user saved listings",
+      "actual": "returns 404 Not Found",
+      "how_found": "called endpoint directly with valid auth",
+      "impact": "Favourites/saved feature cannot use this endpoint",
+      "evidence": []
+    },
+    {
+      "endpoint": "/v1/rentals",
+      "category": "completeness",
+      "documented": "rental object has no is_live field in documentation",
+      "actual": "rental records include is_live boolean field",
+      "how_found": "inspected rental record fields",
+      "impact": "is_live exists on rentals but is undocumented; can be used for filtering",
+      "evidence": []
+    },
+    {
+      "endpoint": "/v1/listings",
+      "category": "completeness",
+      "documented": "listing object does not include is_live field",
+      "actual": "listing records include is_live boolean field (appears to indicate active listings)",
+      "how_found": "inspected listing record fields",
+      "impact": "is_live allows filtering active vs inactive listings — not documented but critical for Q3 of assignment",
+      "evidence": []
+    }
+  ]
+}
