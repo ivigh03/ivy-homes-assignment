@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import ivyLogo from '../assets/ivy.jpg'
 
 const NAV = [
   { to: '/listings', label: 'Listings' },
@@ -21,7 +22,7 @@ export default function Layout({ children }) {
   return (
     <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column' }}>
       <header style={{ background: 'var(--color-surface)', borderBottom: '1px solid var(--color-border)', padding: '0 1.5rem', display: 'flex', alignItems: 'center', gap: '2rem', height: 56 }}>
-        <span style={{ fontWeight: 700, fontSize: '1.1rem' }}>Ivy Homes</span>
+        <img src={ivyLogo} alt="Ivy Homes" style={{ height: 60, objectFit: 'contain', mixBlendMode: 'multiply' }} />
         <nav style={{ display: 'flex', gap: '1rem', flex: 1 }}>
           {NAV.map(({ to, label }) => (
             <NavLink

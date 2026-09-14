@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import ivyLogo from '../assets/ivy.jpg'
 
 export default function LoginPage() {
   const { login } = useAuth()
@@ -30,8 +31,10 @@ export default function LoginPage() {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100dvh', padding: '1rem' }}>
       <form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: 400, background: 'var(--color-surface)', borderRadius: 'var(--radius)', padding: '2rem', boxShadow: 'var(--shadow-md)' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.25rem' }}>Ivy Homes</h1>
-        <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>Sign in to continue</p>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.25rem' }}>
+          <img src={ivyLogo} alt="Ivy Homes" style={{ height: 110, objectFit: 'contain', mixBlendMode: 'multiply' }} />
+        </div>
+        <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem', textAlign: 'center' }}>Sign in to continue</p>
 
         {error && (
           <p style={{ color: 'var(--color-error)', marginBottom: '1rem', fontSize: '0.9rem' }}>{error}</p>
